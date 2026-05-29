@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
-import { NextStudio } from 'next-sanity/studio'
 import { auth } from '@/lib/auth'
-import config from '@/sanity.config'
+import { StudioWrapper } from './studio-wrapper'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,5 +9,5 @@ export default async function StudioPage() {
   if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'INSTRUCTOR')) {
     redirect('/login')
   }
-  return <NextStudio config={config} />
+  return <StudioWrapper />
 }

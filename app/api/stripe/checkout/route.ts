@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   }
 
   const existing = await db.enrollment.findUnique({
-    where: { userId_sanityId: { userId: session.user.id, sanityId: courseId } },
+    where: { userId_sanityCourseId: { userId: session.user.id, sanityCourseId: courseId } },
   });
   if (existing?.status === "ACTIVE") {
     return NextResponse.json({ error: "Already enrolled" }, { status: 409 });
@@ -35,9 +35,9 @@ export async function POST(req: Request) {
 
   if (course.isFree || course.price === 0) {
     await db.enrollment.upsert({
-      where: { userId_sanityId: { userId: session.user.id, sanityId: courseId } },
+      where: { userId_sanityCourseId: { userId: session.user.id, sanityCourseId: courseId } },
       update: { status: "ACTIVE" },
-      create: { userId: session.user.id, sanityId: courseId, status: "ACTIVE" },
+      create: { userId: session.user.id, sanityCourseId: courseId, status: "ACTIVE" },
     });
     return NextResponse.json({ url: `${appUrl}/student/courses/${courseId}` });
   }
@@ -69,11 +69,11 @@ export async function POST(req: Request) {
   });
 
   await db.enrollment.upsert({
-    where: { userId_sanityId: { userId: session.user.id, sanityId: courseId } },
+    where: { userId_sanityCourseId: { userId: session.user.id, sanityCourseId: courseId } },
     update: { status: "PENDING", stripeSessionId: stripeSession.id },
     create: {
       userId: session.user.id,
-      sanityId: courseId,
+      sanityCourseId: courseId,
       status: "PENDING",
       stripeSessionId: stripeSession.id,
     },

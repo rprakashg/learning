@@ -11,7 +11,7 @@ export default async function AdminUsersPage() {
   const users = await db.user.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      _count: { select: { enrollments: true, courses: true } },
+      _count: { select: { enrollments: true } },
     },
   });
 
@@ -29,7 +29,6 @@ export default async function AdminUsersPage() {
               <th className="px-5 py-3.5 text-left font-medium text-gray-500">User</th>
               <th className="px-5 py-3.5 text-left font-medium text-gray-500">Role</th>
               <th className="px-5 py-3.5 text-left font-medium text-gray-500">Enrollments</th>
-              <th className="px-5 py-3.5 text-left font-medium text-gray-500">Courses created</th>
               <th className="px-5 py-3.5 text-left font-medium text-gray-500">Joined</th>
             </tr>
           </thead>
@@ -54,7 +53,6 @@ export default async function AdminUsersPage() {
                   </Badge>
                 </td>
                 <td className="px-5 py-4 text-gray-700">{user._count.enrollments}</td>
-                <td className="px-5 py-4 text-gray-700">{user._count.courses}</td>
                 <td className="px-5 py-4 text-xs text-gray-400">{formatDate(user.createdAt)}</td>
               </tr>
             ))}

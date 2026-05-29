@@ -26,7 +26,7 @@ const options: LoggerOptions = {
    * Common metadata attached to every log
    */
   base: {
-    service: process.env.SERVICE_NAME || "nextjs-app",
+    service: process.env.SERVICE_NAME || "exceller-learning-app",
     environment: process.env.NODE_ENV || "development",
   },
 

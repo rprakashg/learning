@@ -7,7 +7,7 @@ import { CheckCircle, XCircle, Trophy } from "lucide-react";
 interface Question {
   id: string;
   text: string;
-  options: string;
+  options: string[];
   correctAnswer: string;
 }
 
@@ -24,10 +24,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
   const [result, setResult] = useState<{ score: number; correct: number; total: number } | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const questions = quiz.questions.map((q) => ({
-    ...q,
-    options: JSON.parse(q.options) as string[],
-  }));
+  const questions = quiz.questions;
 
   const handleSelect = (questionId: string, option: string) => {
     if (result) return;

@@ -43,7 +43,7 @@ export default async function StudentDashboard() {
   }
 
   // 2. Fetch course content from Sanity
-  const sanityIds = enrollments.map((e) => e.sanityId);
+  const sanityIds = enrollments.map((e) => e.sanityCourseId);
   const courses = await sanityClient.fetch<Array<{
     _id: string;
     title: string;
@@ -72,7 +72,7 @@ export default async function StudentDashboard() {
   const courseMap = Object.fromEntries(courses.map((c) => [c._id, c]));
 
   const enrollmentsWithProgress = enrollments.map((e) => {
-    const course = courseMap[e.sanityId];
+    const course = courseMap[e.sanityCourseId];
     const lessonKeys = (course?.modules ?? []).flatMap((m) =>
       (m.lessons ?? []).map((l) => l._key)
     );
@@ -126,7 +126,7 @@ export default async function StudentDashboard() {
       ) : (
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {inProgress.map((e) => (
-            <Link key={e.id} href={`/student/courses/${e.sanityId}`}>
+            <Link key={e.id} href={`/student/courses/${e.sanityCourseId}`}>
               <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-200 transition hover:shadow-md hover:ring-indigo-200">
                 <div className="mb-3 flex items-start justify-between">
                   <h3 className="font-semibold text-gray-900 line-clamp-1">{e.course?.title ?? "—"}</h3>

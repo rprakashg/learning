@@ -31,24 +31,24 @@ export default async function InstructorDashboard() {
     { instructorId: session.user.id }
   );
 
-  const sanityIds = courses.map((c) => c._id);
+  const sanityCourseIds = courses.map((c) => c._id);
 
   // Enrollment counts per course and total active count
   const [enrollmentGroups, totalActiveEnrollments] = await Promise.all([
-    sanityIds.length
+    sanityCourseIds.length
       ? db.enrollment.groupBy({
-          by: ["sanityId"],
-          where: { sanityId: { in: sanityIds } },
+          by: ["sanityCourseId"],
+          where: { sanityCourseId: { in: sanityCourseIds } },
           _count: { id: true },
         })
       : [],
-    sanityIds.length
-      ? db.enrollment.count({ where: { sanityId: { in: sanityIds }, status: "ACTIVE" } })
+    sanityCourseIds.length
+      ? db.enrollment.count({ where: { sanityCourseId: { in: sanityCourseIds }, status: "ACTIVE" } })
       : 0,
   ]);
 
   const enrollmentMap = Object.fromEntries(
-    enrollmentGroups.map((r) => [r.sanityId, r._count.id])
+    enrollmentGroups.map((r) => [r.sanityCourseId, r._count.id])
   );
   const totalStudents = Object.values(enrollmentMap).reduce((s, n) => s + n, 0);
   const publishedCount = courses.filter((c) => c.isPublished).length;

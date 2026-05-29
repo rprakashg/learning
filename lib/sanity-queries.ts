@@ -132,12 +132,6 @@ export const categoriesQuery = `
   *[_type == "category"] | order(name asc){ _id, name, slug }
 `
 
-export const userProfileByUserIdQuery = `
-  *[_type == "userProfile" && userId == $userId][0]{
-    userId, displayName, avatar
-  }
-`
-
 // Finds a quiz by its lesson _key (quiz is embedded 1:1 inside each lesson)
 export const quizByLessonKeyQuery = `
   *[_type == "course"]{

@@ -1,26 +1,23 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
+import { sanityClient } from "@/lib/sanity";
+import { coursesListQuery, type SanityCourseListItem } from "@/lib/sanity-queries";
 import { Navbar } from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
 import { CourseCard } from "@/components/courses/course-card";
 import { GraduationCap, Users, BookOpen, Star, ArrowRight, CheckCircle } from "lucide-react";
 
 async function getFeaturedCourses() {
-  return db.course.findMany({
-    where: { isPublished: true },
-    include: {
-      instructor: { select: { name: true, image: true } },
-      category: true,
-      _count: { select: { enrollments: true, modules: true } },
-    },
-    orderBy: { createdAt: "desc" },
-    take: 6,
-  });
+  const courses = await sanityClient.fetch<SanityCourseListItem[]>(
+    coursesListQuery,
+    { search: "", categoryId: "" }
+  );
+  return courses.slice(0, 6);
 }
 
 async function getStats() {
   const [courses, users, enrollments] = await Promise.all([
-    db.course.count({ where: { isPublished: true } }),
+    sanityClient.fetch<number>(`count(*[_type == "course" && isPublished == true])`),
     db.user.count(),
     db.enrollment.count({ where: { status: "ACTIVE" } }),
   ]);
@@ -116,7 +113,20 @@ export default async function HomePage() {
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {courses.map((course) => (
-                <CourseCard key={course.id} course={course} />
+                <CourseCard
+                  key={course._id}
+                  course={{
+                    id: course._id,
+                    title: course.title,
+                    description: course.description ?? null,
+                    imageUrl: course.imageUrl ?? null,
+                    price: course.price,
+                    isFree: course.isFree,
+                    category: course.category ? { name: course.category.name } : null,
+                    instructor: { name: course.instructorName ?? null, image: null },
+                    _count: { enrollments: 0, modules: course.moduleCount },
+                  }}
+                />
               ))}
             </div>
           )}

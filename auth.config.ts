@@ -6,6 +6,13 @@ export const authConfig: NextAuthConfig = {
   pages: { signIn: "/login" },
   providers: [], // providers are added in lib/auth.ts, not needed here for middleware
   callbacks: {
+    async session({ session, token }) {
+      if (token) {
+        session.user.role = token.role as string;
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const role = auth?.user?.role;

@@ -78,9 +78,14 @@ export function Sidebar({ role }: SidebarProps) {
       <div className="border-t border-gray-200 pt-4">
         <Link
           href="/settings"
-          className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900"
+          className={cn(
+            "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+            pathname === "/settings"
+              ? "bg-indigo-50 text-indigo-700"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+          )}
         >
-          <Settings className="h-5 w-5 text-gray-400" />
+          <Settings className={cn("h-5 w-5", pathname === "/settings" ? "text-indigo-600" : "text-gray-400")} />
           Settings
         </Link>
       </div>

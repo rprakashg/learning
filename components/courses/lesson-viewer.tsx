@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QuizCard } from "@/components/courses/quiz-card";
+import { PortableText } from "@portabletext/react";
 
 interface Lesson {
   id: string;
   title: string;
   description: string | null;
-  content: string | null;
+  content: any[] | null;
   videoUrl: string | null;
   quiz: {
     id: string;
@@ -18,7 +19,7 @@ interface Lesson {
     questions: Array<{
       id: string;
       text: string;
-      options: string;
+      options: string[];
       correctAnswer: string;
     }>;
   } | null;
@@ -76,10 +77,10 @@ export function LessonViewer({ lesson, courseId, isCompleted }: LessonViewerProp
       )}
 
       {/* Content */}
-      {lesson.content && (
+      {lesson.content && lesson.content.length > 0 && (
         <div className="prose prose-indigo max-w-none mb-8">
-          <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">
-            {lesson.content}
+          <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm leading-relaxed text-gray-700">
+            <PortableText value={lesson.content} />
           </div>
         </div>
       )}

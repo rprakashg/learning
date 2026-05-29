@@ -22,7 +22,7 @@ export default async function StudentCourseViewPage({
   const { lessonId: activeLessonId } = await searchParams;
 
   const enrollment = await db.enrollment.findUnique({
-    where: { userId_sanityId: { userId: session.user.id, sanityId: courseId } },
+    where: { userId_sanityCourseId: { userId: session.user.id, sanityCourseId: courseId } },
   });
 
   if (!enrollment || enrollment.status !== "ACTIVE") {

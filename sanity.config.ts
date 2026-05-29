@@ -1,14 +1,15 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
-import { courseSchema, categorySchema, userProfileSchema } from './sanity/schemas'
+import { courseSchema, categorySchema } from './sanity/schemas'
 
 export default defineConfig({
   name: 'default',
-  title: 'Exceller Learning',
+  title: 'Exceller learning platform',
+  basePath: "/studio",
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
   plugins: [structureTool()],
   schema: {
-    types: [courseSchema, categorySchema, userProfileSchema],
+    types: [courseSchema, categorySchema],
   },
 })

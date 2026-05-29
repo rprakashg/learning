@@ -27,10 +27,10 @@ export default async function CourseDetailPage({
   const [enrollment, enrollmentCount] = await Promise.all([
     session
       ? db.enrollment.findUnique({
-          where: { userId_sanityId: { userId: session.user.id, sanityId: courseId } },
+          where: { userId_sanityCourseId: { userId: session.user.id, sanityCourseId: courseId } },
         })
       : null,
-    db.enrollment.count({ where: { sanityId: courseId, status: "ACTIVE" } }),
+    db.enrollment.count({ where: { sanityCourseId: courseId, status: "ACTIVE" } }),
   ]);
 
   const isEnrolled = enrollment?.status === "ACTIVE";

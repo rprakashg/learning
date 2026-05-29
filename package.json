@@ -1,5 +1,5 @@
 {
-  "name": "workshops",
+  "name": "learning",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -37,8 +37,9 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.75.0",
-    "sanity": "^3",
+    "sanity": "^5.28.0",
     "stripe": "^22.1.0",
+    "styled-components": "^6.4.2",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.4.3",
     "zustand": "^5.0.13"
