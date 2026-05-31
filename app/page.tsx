@@ -1,18 +1,14 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { sanityClient } from "@/lib/sanity";
-import { coursesListQuery, type SanityCourseListItem } from "@/lib/sanity-queries";
+import { featuredCoursesQuery, type SanityCourseListItem } from "@/lib/sanity-queries";
 import { Navbar } from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
 import { CourseCard } from "@/components/courses/course-card";
 import { GraduationCap, Users, BookOpen, Star, ArrowRight, CheckCircle } from "lucide-react";
 
 async function getFeaturedCourses() {
-  const courses = await sanityClient.fetch<SanityCourseListItem[]>(
-    coursesListQuery,
-    { search: "", categoryId: "" }
-  );
-  return courses.slice(0, 6);
+  return sanityClient.fetch<SanityCourseListItem[]>(featuredCoursesQuery);
 }
 
 async function getStats() {

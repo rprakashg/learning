@@ -52,6 +52,7 @@ export type SanityCourse = {
   price: number
   isFree: boolean
   isPublished: boolean
+  isFeatured: boolean
   imageUrl?: string
   author?: SanityAuthor
   category?: { _id: string; name: string }
@@ -66,6 +67,7 @@ export type SanityCourseListItem = {
   price: number
   isFree: boolean
   isPublished: boolean
+  isFeatured: boolean
   imageUrl?: string
   author?: { firstName: string; lastName: string }
   category?: { _id: string; name: string }
@@ -136,6 +138,16 @@ export const allCoursesAdminQuery = `
 `
 
 export const courseCountQuery = `count(*[_type == "course"])`
+
+export const featuredCoursesQuery = `
+  *[_type == "course" && isPublished == true && isFeatured == true]{
+    _id, _createdAt, title, description, price, isFree, isPublished, isFeatured, imageUrl,
+    "author": author->{ firstName, lastName },
+    "category": category->{ _id, name },
+    "moduleCount": count(modules),
+    "lessonCount": count(modules[].lessons[])
+  } | order(_createdAt desc)
+`
 
 export const categoriesQuery = `
   *[_type == "category"] | order(name asc){ _id, name, slug }
