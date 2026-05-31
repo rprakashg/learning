@@ -7,6 +7,7 @@ import { authConfig } from "@/auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
+  useSecureCookies: process.env.NODE_ENV === "production",
   adapter: PrismaAdapter(db),
   providers: [
     Credentials({
