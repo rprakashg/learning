@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { CourseCard } from "@/components/courses/course-card";
 import { GraduationCap, Users, BookOpen, Star, ArrowRight, CheckCircle } from "lucide-react";
+import { LatestArticles } from "@/components/articles/latest-articles";
 
 async function getFeaturedCourses() {
   return sanityClient.fetch<SanityCourseListItem[]>(featuredCoursesQuery);
@@ -130,16 +131,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured Blog posts */}
-      <section className="bg-indigo-600 py-16">
-          <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-white">Latest technical articles</h2>
-            <p className="mt-4 text-indigo-200">
-              Latest technical articles written by our authors.
-            </p>
-          </div>
-      </section>    
-      
+      {/* Latest articles */}
+      <LatestArticles />
+
       {/* Connect with us */}
 
       {/* Why Exceller */}

@@ -1,6 +1,6 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
-import { courseSchema, categorySchema, authorSchema } from './sanity/schemas'
+import { courseSchema, categorySchema, authorSchema, articleSchema } from './sanity/schemas'
 
 export default defineConfig({
   name: 'default',
@@ -10,6 +10,6 @@ export default defineConfig({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
   plugins: [structureTool()],
   schema: {
-    types: [courseSchema, categorySchema, authorSchema],
+    types: [courseSchema, categorySchema, authorSchema, articleSchema],
   },
 })

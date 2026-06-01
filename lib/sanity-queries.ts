@@ -149,6 +149,61 @@ export const featuredCoursesQuery = `
   } | order(_createdAt desc)
 `
 
+// ─── Article types ───────────────────────────────────────────────────────────
+
+export type SanityArticle = {
+  _id: string
+  _createdAt: string
+  title: string
+  slug: { current: string }
+  summary: string
+  coverImage?: {
+    _type: 'image'
+    asset: { _ref: string; _type: 'reference' }
+    hotspot?: { x: number; y: number; height: number; width: number }
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  body?: any[]
+  author?: { firstName: string; lastName: string }
+  tags?: string[]
+  readingTimeMinutes?: number
+  isPublished: boolean
+  isFeatured: boolean
+  publishedAt?: string
+}
+
+export type SanityArticleListItem = {
+  _id: string
+  title: string
+  slug: { current: string }
+  summary: string
+  coverImageUrl?: string
+  author?: { firstName: string; lastName: string }
+  tags?: string[]
+  readingTimeMinutes?: number
+  publishedAt?: string
+}
+
+// ─── Article GROQ queries ─────────────────────────────────────────────────────
+
+export const latestArticlesQuery = `
+  *[_type == "article" && isPublished == true] | order(publishedAt desc) [0...6] {
+    _id, title, slug, summary,
+    "coverImageUrl": coverImage.asset->url,
+    "author": author->{ firstName, lastName },
+    tags, readingTimeMinutes, publishedAt
+  }
+`
+
+export const featuredArticlesQuery = `
+  *[_type == "article" && isPublished == true && isFeatured == true] | order(publishedAt desc) [0...3] {
+    _id, title, slug, summary,
+    "coverImageUrl": coverImage.asset->url,
+    "author": author->{ firstName, lastName },
+    tags, readingTimeMinutes, publishedAt
+  }
+`
+
 export const categoriesQuery = `
   *[_type == "category"] | order(name asc){ _id, name, slug }
 `
