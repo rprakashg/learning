@@ -4,12 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request_target:
-    branches:
-      - main
-    types:
-      - opened
-      - synchronize
+  workflow_dispatch:
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -33,8 +28,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || '' }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -59,23 +52,6 @@ jobs:
 
       - name: Deploy to Vercel (Preview)
         id: deploy-preview
-        if: github.event_name == 'pull_request_target'
         run: |
           url=$(vercel deploy --token=${{ env.VERCEL_TOKEN }})
           echo "url=$url" >> $GITHUB_OUTPUT
-
-      - name: Comment preview URL on PR
-        if: github.event_name == 'pull_request_target'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `**Preview deployment ready:** ${{ steps.deploy-preview.outputs.url }}`
-            })
-
-      - name: Deploy to Vercel (Production)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: vercel deploy --prebuilt --prod --token=${{ env.VERCEL_TOKEN }}
